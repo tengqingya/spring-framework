@@ -300,6 +300,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						@Override
 						public Object getObject() throws BeansException {
 							try {
+								//AbstractAutowireCapableBeanFactory 中实现
 								return createBean(beanName, mbd, args);
 							}
 							catch (BeansException ex) {
@@ -339,6 +340,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 							public Object getObject() throws BeansException {
 								beforePrototypeCreation(beanName);
 								try {
+									//AbstractAutowireCapableBeanFactory 中实现
 									return createBean(beanName, mbd, args);
 								}
 								finally {

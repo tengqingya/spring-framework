@@ -452,6 +452,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			logger.debug("Creating instance of bean '" + beanName + "'");
 		}
 		// Make sure bean class is actually resolved at this point.
+		//如果没有找到这个name的class类型是会抛出异常的
 		resolveBeanClass(mbd, beanName);
 
 		// Prepare method overrides.
@@ -476,10 +477,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					"BeanPostProcessor before instantiation of bean failed", ex);
 		}
 
+		//逐渐的构造一个bean,分别用factory method, and autowiring a constructor.去构造，这些都是在xml中配置的。
 		Object beanInstance = doCreateBean(beanName, mbd, args);
 		if (logger.isDebugEnabled()) {
 			logger.debug("Finished creating instance of bean '" + beanName + "'");
 		}
+		//// TODO: 2017/2/13 @@PostConstruct什么时候调用
 		return beanInstance;
 	}
 
@@ -1031,11 +1034,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 				}
 			}
 		}
+		//用构造函数
 		if (resolved) {
 			if (autowireNecessary) {
 				return autowireConstructor(beanName, mbd, null, null);
 			}
 			else {
+				//用默认的构造函数得到
 				return instantiateBean(beanName, mbd);
 			}
 		}
