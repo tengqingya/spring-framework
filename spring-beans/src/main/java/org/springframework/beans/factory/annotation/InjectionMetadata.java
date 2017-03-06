@@ -166,6 +166,8 @@ public class InjectionMetadata {
 			if (this.isField) {
 				Field field = (Field) this.member;
 				ReflectionUtils.makeAccessible(field);
+				//自动注入bean的 真实的 地方
+				//没有调用set方法 也可以 自动注入或者 调用invoke方法也行 这样就会调用set方法
 				field.set(target, getResourceToInject(target, requestingBeanName));
 			}
 			else {

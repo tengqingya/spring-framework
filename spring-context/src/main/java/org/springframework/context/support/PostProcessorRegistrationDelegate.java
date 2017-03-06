@@ -180,6 +180,7 @@ class PostProcessorRegistrationDelegate {
 	public static void registerBeanPostProcessors(
 			ConfigurableListableBeanFactory beanFactory, AbstractApplicationContext applicationContext) {
 
+		//得到所有BeanPostProcessor根据class type 然后加到beanfactory中的	private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>(); 中
 		String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class, true, false);
 
 		// Register BeanPostProcessorChecker that logs an info message when
