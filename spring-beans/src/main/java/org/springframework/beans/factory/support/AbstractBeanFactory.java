@@ -301,6 +301,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 						public Object getObject() throws BeansException {
 							try {
 								//AbstractAutowireCapableBeanFactory 中实现
+								//
 								return createBean(beanName, mbd, args);
 							}
 							catch (BeansException ex) {
@@ -1500,6 +1501,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected Object getObjectForBeanInstance(
 			Object beanInstance, String name, String beanName, RootBeanDefinition mbd) {
 
+		//判断一个bean是否实现了factorybean如果实现了辣么就返回factorybean中的getObject方法的bean
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
 		if (BeanFactoryUtils.isFactoryDereference(name) && !(beanInstance instanceof FactoryBean)) {
 			throw new BeanIsNotAFactoryException(transformedBeanName(name), beanInstance.getClass());

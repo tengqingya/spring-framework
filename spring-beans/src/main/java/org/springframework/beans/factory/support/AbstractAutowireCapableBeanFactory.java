@@ -466,7 +466,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		try {
 			// Give BeanPostProcessors a chance to return a proxy instead of the target bean instance.
-			//如果bean继承了InstantiationAwareBeanPostProcessor则不会再往下执行直接返回bean
+			//如果bean工厂有InstantiationAwareBeanPostProcessor则不会再往下执行直接返回bean
 			Object bean = resolveBeforeInstantiation(beanName, mbd);
 			if (bean != null) {
 				return bean;
@@ -477,6 +477,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 					"BeanPostProcessor before instantiation of bean failed", ex);
 		}
 
+		//如果以上processor没有返回自定义的bean则进入正常创建bean流程
 		//逐渐的构造一个bean,分别用factory method, and autowiring a constructor.去构造，这些都是在xml中配置的。
 		Object beanInstance = doCreateBean(beanName, mbd, args);
 		if (logger.isDebugEnabled()) {
@@ -533,6 +534,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			addSingletonFactory(beanName, new ObjectFactory<Object>() {
 				@Override
 				public Object getObject() throws BeansException {
+					//aop的advice织入
 					return getEarlyBeanReference(beanName, mbd, bean);
 				}
 			});
@@ -543,6 +545,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		try {
 			//装配bean @autowired
 			populateBean(beanName, mbd, instanceWrapper);
+			//装配完bean后也就是说在init方法之前就装配结束了，在init方法中就可以使用自动注入的bean了
 			if (exposedObject != null) {
 				exposedObject = initializeBean(beanName, exposedObject, mbd);
 			}
@@ -1577,6 +1580,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			}, getAccessControlContext());
 		}
 		else {
+			//实现了BeanNameAware等Aware接口的bean会调用其set***方法得到某些东西
 			invokeAwareMethods(beanName, bean);
 		}
 
